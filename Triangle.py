@@ -9,49 +9,52 @@ The primary goal of this file is to demonstrate a simple python program to class
 @author: rk
 """
 
-def classifyTriangle(a,b,c):
+def classifyTriangle(a, b, c):
     """
-    Your correct code goes here...  Fix the faulty logic below until the code passes all of 
-    you test cases. 
-    
-    This function returns a string with the type of triangle from three integer values
-    corresponding to the lengths of the three sides of the Triangle.
-    
-    return:
-        If all three sides are equal, return 'Equilateral'
-        If exactly one pair of sides are equal, return 'Isoceles'
-        If no pair of  sides are equal, return 'Scalene'
-        If not a valid triangle, then return 'NotATriangle'
-        If the sum of any two sides equals the squate of the third side, then return 'Right'
-      
-      BEWARE: there may be a bug or two in this code
+    Classify a triangle based on side lengths a, b, c.
+
+    Returns:
+        'InvalidInput'   if inputs are not valid integers in the allowed range (>0 and <=200)
+        'NotATriangle'   if the sides do not satisfy triangle inequality
+        'Equilateral'    if all three sides are equal
+        'Right'          if it is a right triangle (Pythagorean triple)
+        'Isosceles'      if exactly two sides are equal
+        'Scalene'        if all sides are different
     """
 
-    # require that the input values be >= 0 and <= 200
+    # --- Input validation ---
+
+    # All sides must be integers
+    if not (isinstance(a, int) and isinstance(b, int) and isinstance(c, int)):
+        return 'InvalidInput'
+
+    # Each side must be > 0
+    if a <= 0 or b <= 0 or c <= 0:
+        return 'InvalidInput'
+
+    # Each side must be <= 200
     if a > 200 or b > 200 or c > 200:
         return 'InvalidInput'
-        
-    if a <= 0 or b <= b or c <= 0:
-        return 'InvalidInput'
-    
-    # verify that all 3 inputs are integers  
-    # Python's "isinstance(object,type) returns True if the object is of the specified type
-    if not(isinstance(a,int) and isinstance(b,int) and isinstance(c,int)):
-        return 'InvalidInput';
-      
-    # This information was not in the requirements spec but 
-    # is important for correctness
-    # the sum of any two sides must be strictly less than the third side
-    # of the specified shape is not a triangle
-    if (a >= (b - c)) or (b >= (a - c)) or (c >= (a + b)):
+
+    # --- Triangle inequality ---
+    # For valid triangles, sum of any two sides must be strictly greater than the third
+    if (a + b) <= c or (a + c) <= b or (b + c) <= a:
         return 'NotATriangle'
-        
-    # now we know that we have a valid triangle 
-    if a == b and b == a:
+
+    # --- Equilateral ---
+    if a == b == c:
         return 'Equilateral'
-    elif ((a * 2) + (b * 2)) == (c * 2):
+
+    # --- Right triangle ---
+    # Sort the sides so that z is the largest side, then check x^2 + y^2 == z^2
+    sides = sorted([a, b, c])
+    x, y, z = sides[0], sides[1], sides[2]
+    if x * x + y * y == z * z:
         return 'Right'
-    elif (a != b) and  (b != c) and (a != b):
-        return 'Scalene'
-    else:
-        return 'Isoceles'
+
+    # --- Isosceles ---
+    if a == b or b == c or a == c:
+        return 'Isosceles'
+
+    # --- Scalene ---
+    return 'Scalene'
