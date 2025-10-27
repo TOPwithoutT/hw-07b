@@ -23,7 +23,6 @@ def classifyTriangle(a, b, c):
     """
 
     # --- Input validation ---
-
     # All sides must be integers
     if not (isinstance(a, int) and isinstance(b, int) and isinstance(c, int)):
         return 'InvalidInput'
@@ -37,7 +36,6 @@ def classifyTriangle(a, b, c):
         return 'InvalidInput'
 
     # --- Triangle inequality ---
-    # For valid triangles, sum of any two sides must be strictly greater than the third
     if (a + b) <= c or (a + c) <= b or (b + c) <= a:
         return 'NotATriangle'
 
@@ -46,7 +44,6 @@ def classifyTriangle(a, b, c):
         return 'Equilateral'
 
     # --- Right triangle ---
-    # Sort the sides so that z is the largest side, then check x^2 + y^2 == z^2
     sides = sorted([a, b, c])
     x, y, z = sides[0], sides[1], sides[2]
     if x * x + y * y == z * z:
